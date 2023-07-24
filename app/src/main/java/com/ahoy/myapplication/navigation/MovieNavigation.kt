@@ -1,5 +1,6 @@
 package com.ahoy.myapplication.navigation
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -10,12 +11,12 @@ import com.ahoy.myapplication.screens.detail.DetailsScreen
 import com.ahoy.myapplication.screens.home.HomeScreen
 
 @Composable
-fun MovieNavigation(){
+fun MovieNavigation( context : ComponentActivity){
 
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = MovieScreens.HomeScreen.name){
         composable(route = MovieScreens.HomeScreen.name){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, context = context)
         }
 
         composable(route = MovieScreens.DetailsScreen.name+"/{movie}",

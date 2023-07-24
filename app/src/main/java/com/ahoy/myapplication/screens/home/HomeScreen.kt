@@ -1,12 +1,13 @@
 package com.ahoy.myapplication.screens.home
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.ahoy.myapplication.MyApp
 import com.ahoy.myapplication.model.Movie
@@ -23,7 +25,7 @@ import com.ahoy.myapplication.widgets.MovieRow
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, context: ComponentActivity) {
 
     Scaffold(topBar = {
         TopAppBar(
@@ -36,7 +38,7 @@ fun HomeScreen(navController: NavController) {
             )
         }
     }) {
-        MainContent(navController)
+        MainContent(navController,context)
     }
 }
 
@@ -44,14 +46,23 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun MainContent(
     navController: NavController,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    context: ComponentActivity
 ) {
+    val viewModel : HomeScreenViewModel = hiltViewModel()
+    val moviesListState = remember { mutableStateOf<List<Movie>>(emptyList()) }
 
-    val moviesList: List<Movie> by viewModel.moviesList.observeAsState(emptyList())
+    LaunchedEffect(viewModel.moviesList) {
+        viewModel.moviesList.observe(context) {
+            moviesListState.value = it
+            Log.i("movies", "MainContent: ${it.toString()}")
+        }
+    }
     Column(modifier = Modifier.padding(12.dp)) {
+
         LazyColumn {
-            items(moviesList) {
+            items(moviesListState.value) {
                 MovieRow(movie = it) { movie ->
+                    Log.i("movies", "MainContent: ${movie.toString()}")
                     navController.navigate(route = MovieScreens.DetailsScreen.name + "/$movie")
                 }
             }
@@ -59,10 +70,11 @@ fun MainContent(
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     MyApp {
         MovieNavigation()
     }
-}
+}*/

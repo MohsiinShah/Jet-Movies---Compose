@@ -1,5 +1,6 @@
 package com.ahoy.myapplication.screens.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,14 +11,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    val repository : GetMoviesRepo
+    private val repository : GetMoviesRepo
 ): ViewModel() {
 
-    val _moviesList = MutableLiveData<List<Movie>>()
+    private val _moviesList = MutableLiveData<List<Movie>>()
     val moviesList : LiveData<List<Movie>> = _moviesList
+    init {
+        getMovies()
+    }
 
-    fun getMovies(){
+    private fun getMovies(){
         _moviesList.postValue(repository.getAllMovies())
+        Log.i("movies", "getMovies:${repository.getAllMovies()} ")
     }
 
 }
