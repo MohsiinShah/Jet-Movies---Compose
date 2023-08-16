@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                MovieNavigation()
+                MovieNavigation(null)
             }
         }
     }

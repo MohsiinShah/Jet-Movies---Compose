@@ -69,5 +69,6 @@ dependencies {
 
     //Rating bar
     implementation 'com.github.a914-gowtham:compose-ratingbar:1.2.3'
+    implementation 'com.google.code.gson:gson:2.8.2'
 
 }

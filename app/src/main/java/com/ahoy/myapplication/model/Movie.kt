@@ -1,5 +1,9 @@
 package com.ahoy.myapplication.model
 
+import android.net.Uri
+import com.ahoy.myapplication.JsonNavType
+import com.google.gson.Gson
+
 data class Movie(
     val id: String,
     val title: String,
@@ -11,7 +15,15 @@ data class Movie(
     val poster: String,
     val images: List<String>,
     val rating: String
-)
+){
+    override fun toString(): String = Uri.encode(Gson().toJson(this))
+}
+
+class MovieArgType : JsonNavType<Movie>() {
+    override fun fromJsonParse(value: String): Movie = Gson().fromJson(value, Movie::class.java)
+
+    override fun Movie.getJsonParse(): String = Gson().toJson(this)
+}
 
 fun getMovies(): List<Movie>{
     return listOf(

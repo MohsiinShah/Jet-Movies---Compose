@@ -29,7 +29,7 @@ import com.ahoy.myapplication.screens.home.MainContent
 import com.ahoy.myapplication.widgets.MovieRow
 
 @Composable
-fun DetailsScreen(navController: NavController, movieID: String?) {
+fun DetailsScreen(navController: NavController, movie: Movie?) {
 
     Scaffold(topBar = {
         TopAppBar(
@@ -51,12 +51,12 @@ fun DetailsScreen(navController: NavController, movieID: String?) {
             }
         }
     }) {
-        DetailsScreenContent(movieID = movieID)
+        movie?.let { it1 -> DetailsScreenContent(movie = it1) }
     }
 }
 
 @Composable
-fun DetailsScreenContent(movieID: String?){
+fun DetailsScreenContent(movie: Movie){
         Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -66,7 +66,7 @@ fun DetailsScreenContent(movieID: String?){
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val movie = getMovies().single {movie -> movie.id == movieID }
+            //val movie = getMovies().single {movie -> movie.id == movieID }
 
             Column {
                 MovieRow(movie = movie)

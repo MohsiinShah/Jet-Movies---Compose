@@ -27,6 +27,7 @@ import com.ahoy.myapplication.navigation.MovieScreens
 import com.ahoy.myapplication.widgets.MovieRow
 
 
+var selectedMovie: Movie? = null
 @Composable
 fun HomeScreen(navController: NavController){
 
@@ -52,9 +53,10 @@ fun MainContent(
 
     Column(modifier = Modifier.padding(12.dp)) {
         LazyColumn {
-            items(items = moviesList) {
-                MovieRow(movie = it){ movie ->
-                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie")
+            items(items = moviesList) { mov ->
+                MovieRow(movie = mov){ movie ->
+                    selectedMovie = mov
+                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$selectedMovie")
                 }
             }
         }
@@ -65,6 +67,6 @@ fun MainContent(
 @Composable
 fun DefaultPreview() {
     MyApp {
-        MovieNavigation()
+        MovieNavigation(selectedMovie)
     }
 }
